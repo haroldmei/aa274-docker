@@ -2,7 +2,6 @@
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu xenial main" > /etc/apt/sources.list.d/ros-latest.list'
 sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 sudo apt-get update
-# sudo apt-get install -y ros-kinetic-joy ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard ros-kinetic-laser-proc ros-kinetic-rgbd-launch ros-kinetic-depthimage-to-laserscan ros-kinetic-rosserial-arduino ros-kinetic-rosserial-python ros-kinetic-rosserial-server ros-kinetic-rosserial-client ros-kinetic-rosserial-msgs ros-kinetic-amcl ros-kinetic-map-server ros-kinetic-move-base ros-kinetic-urdf ros-kinetic-xacro ros-kinetic-compressed-image-transport ros-kinetic-rqt-image-view ros-kinetic-gmapping ros-kinetic-navigation ros-kinetic-interactive-markers
 sudo apt-get install -y ros-kinetic-ros-base
 sudo rosdep init
 rosdep update
@@ -33,3 +32,15 @@ echo "export TURTLEBOT3_MODEL=waffle" >> ~/.bashrc
 source ~/.bashrc
 
 catkin_make && catkin_make install
+
+sudo apt-get install -y wget expect x11-xkb-utils xauth xfonts-base xkb-data
+tmp="$(mktemp)" && \
+	wget -O "$tmp" https://svwh.dl.sourceforge.net/project/virtualgl/2.6.2/virtualgl_2.6.2_amd64.deb && \
+	sudo dpkg -i "$tmp" && \
+	rm -f $tmp
+tmp="$(mktemp)" && \
+	wget -O "$tmp" https://svwh.dl.sourceforge.net/project/turbovnc/2.2.2/turbovnc_2.2.2_amd64.deb && \
+	sudo dpkg -i "$tmp" && \
+	rm -f $tmp
+
+echo "export PATH=${PATH}:/opt/VirtualGL/bin:/opt/TurboVNC/bin" >> ~/.bashrc

@@ -30,6 +30,7 @@ ENV PATH ${PATH}:/opt/VirtualGL/bin:/opt/TurboVNC/bin
 ARG uid
 ARG user
 ARG gid
+RUN groupadd -g $gid -o $user
 RUN useradd -m -u $uid -g $gid $user
 RUN usermod -aG video $user
 RUN chmod 755 /root

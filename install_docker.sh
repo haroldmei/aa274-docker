@@ -44,6 +44,7 @@ sudo apt-get update
 sudo apt-get install -y nvidia-docker2
 sudo pkill -SIGHUP dockerd
 docker run --runtime=nvidia --rm nvidia/cuda nvidia-smi
+docker network create --driver bridge aa274_net
 
 # Create Docker group to avoid need for sudo
 sudo groupadd docker
