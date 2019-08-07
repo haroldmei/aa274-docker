@@ -33,7 +33,7 @@ source ~/.bashrc
 
 catkin_make && catkin_make install
 
-sudo apt-get install -y wget expect x11-xkb-utils xauth xfonts-base xkb-data
+sudo apt-get install -y wget expect
 tmp="$(mktemp)" && \
 	wget -O "$tmp" https://svwh.dl.sourceforge.net/project/virtualgl/2.6.2/virtualgl_2.6.2_amd64.deb && \
 	sudo dpkg -i "$tmp" && \
