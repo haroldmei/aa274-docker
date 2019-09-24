@@ -5,9 +5,10 @@
 ./install\_docker.sh
 ```
 2. Restart computer.
-3. Initialize the Catkin workspace. Other ROS packages can be put into `aa274/catkin_ws` as well.
+3. Create the Catkin workspace (`aa274-docker/catkin_ws`) and Docker network
+   (`aa274_net`). Other ROS packages can be put into `aa274/catkin_ws` as well.
 ```
-./init\_catkin\_ws.sh
+./init\_aa274.sh
 ```
 4. Build the Docker image. This should be run any time `docker/Dockerfile` is changed.
 ```
