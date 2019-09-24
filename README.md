@@ -5,8 +5,8 @@
 ./install_docker.sh
 ```
 2. Restart computer.
-3. Create the Catkin workspace (`aa274-docker/catkin_ws`) and Docker network
-   (`aa274_net`). Other ROS packages can be put into `aa274/catkin_ws` as well.
+3. Create the Catkin workspace (`catkin_ws`) and Docker network
+   (`aa274_net`). Other ROS packages can be put into `catkin_ws` as well.
 ```
 ./init_aa274.sh
 ```
