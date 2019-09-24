@@ -15,7 +15,7 @@
 ```
 5. Build the Catkin workspace. This should be run any time a new ROS package is added.
 ```
-./catkin\_make\_install.sh
+./rosdep\_install.sh
 ```
 6. Whenever you make changes to your own ROS package, compile it with the
    following command:
