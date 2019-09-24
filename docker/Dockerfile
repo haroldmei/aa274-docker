@@ -43,3 +43,7 @@ COPY ros_entrypoint.sh /
 RUN sed -i "s/\${HOST_USER}/$user/g" /ros_entrypoint.sh
 RUN echo "\nsource /ros_env.sh\n" >> /home/$user/.bashrc
 RUN ln -s /home/$user/catkin_ws /root/catkin_ws
+
+# Install pip libraries
+RUN apt-get install -y python-pip
+RUN pip install numpy==1.16 matplotlib scipy==1.2
