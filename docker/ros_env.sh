@@ -6,7 +6,9 @@ fi
 
 # Setup ros environment
 source /opt/ros/kinetic/setup.bash
-source ~/catkin_ws/$build/setup.bash
+if [[ -f ~/catkin_ws/$build/setup.bash ]]; then
+	source ~/catkin_ws/$build/setup.bash
+fi
 
 # Export environment variables
 if [[ -z $ROS_MASTER_URI ]]; then

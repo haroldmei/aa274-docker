@@ -35,11 +35,6 @@ if [[ $1 == "bash" ]]; then
 	cd $HOME/catkin_ws
 	bash -i
 else
-	if [[ $# -ge 2 && $2 == "rvizweb" ]]; then
-		# Source install setup.bash
-		build=install
-	fi
-
 	# Run ROS command
 	source /ros_env.sh
 	cd $HOME/catkin_ws

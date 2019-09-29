@@ -70,7 +70,11 @@ if [[ -n $display ]]; then
 	fi
 	cmd+=(--env "DISPLAY=:$display")
 elif [[ -n $DISPLAY ]]; then
-	cmd+=(--env "DISPLAY=$DISPLAY")
+	if [[ $(uname) == 'Darwin' ]]; then
+		cmd+=(--env "DISPLAY=host.docker.internal:0")
+	else
+		cmd+=(--env "DISPLAY=$DISPLAY")
+	fi
 fi
 
 # Set rosport to default (11311)
@@ -85,36 +89,10 @@ fi
 
 cmd+=(--env "ROS_MASTER_URI=http://$rosmaster:$rosport")
 
-if [[ -n $display || -n $DISPLAY ]]; then
-	# Set environment variables
-	cmd+=(--env "QT_GRAPHICSSYSTEM=native")
-
-	# Give Docker container access to host X11 for hardware acceleration,
-	# unless vncport is defined and display == 0
-	if [[ $display -gt 0 || -z $vncport ]]; then
-		# Run Nvidia driver
-		cmd+=(--runtime nvidia)
-
-		XSOCK=/tmp/.X11-unix/X0
-		XAUTH=/tmp/.docker.xauth
-		touch $XAUTH
-		xauth nlist $DISPLAY | sed -e 's/^..../ffff/' | xauth -f $XAUTH nmerge -
-		cmd+=(--volume=$XSOCK:$XSOCK:rw \
-		  	  --volume=$XAUTH:$XAUTH:rw)
-	fi
-
-	# Prepend vglrun to command
-	set -- vglrun "$@"
-fi
-
-
 # Application specific options
 if [[ $* == *roscore* ]]; then
 	# Name the roscore container 'master' so that other nodes can reach it
 	cmd+=(--name $rosmaster)
-elif [[ $* == *rvizweb* ]]; then
-	# Port forwarding for rvizweb
-	cmd+=(-p 8001:8001 -p 9090:9090)
 fi
 
 # Run command

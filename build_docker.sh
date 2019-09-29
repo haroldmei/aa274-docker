@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd docker
 docker build . --tag=aa274 \
 	--build-arg uid=$UID \

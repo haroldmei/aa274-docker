@@ -3,17 +3,6 @@ FROM osrf/ros:kinetic-desktop-full
 # Install dependent packages for TurtleBot3 control
 RUN apt-get update && apt-get install -y ros-kinetic-joy ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard ros-kinetic-laser-proc ros-kinetic-rgbd-launch ros-kinetic-depthimage-to-laserscan ros-kinetic-rosserial-arduino ros-kinetic-rosserial-python ros-kinetic-rosserial-server ros-kinetic-rosserial-client ros-kinetic-rosserial-msgs ros-kinetic-amcl ros-kinetic-map-server ros-kinetic-move-base ros-kinetic-urdf ros-kinetic-xacro ros-kinetic-compressed-image-transport ros-kinetic-rqt-image-view ros-kinetic-gmapping ros-kinetic-navigation ros-kinetic-interactive-markers
 
-# Install Nvidia OpenGL
-RUN apt-get install -y autoconf
-ENV NVIDIA_VISIBLE_DEVICES all
-ENV NVIDIA_DRIVER_CAPABILITIES all
-RUN git clone --branch="v1.0.0" https://github.com/NVIDIA/libglvnd.git /opt/libglvnd && \
-	cd /opt/libglvnd && \
-	./autogen.sh && \
-	./configure --prefix=/usr/local --libdir=/usr/local/lib/x86_64-linux-gnu && \
-	make -j"$(nproc)" install-strip && \
-	find /usr/local/lib/x86_64-linux-gnu -type f -name 'lib*.la' -delete
-
 # Install TurboVNC
 RUN apt-get install -y wget expect x11-xkb-utils xauth xfonts-base xkb-data
 RUN tmp="$(mktemp)" && \
@@ -44,6 +33,5 @@ RUN sed -i "s/\${HOST_USER}/$user/g" /ros_entrypoint.sh
 RUN echo "\nsource /ros_env.sh\n" >> /home/$user/.bashrc
 RUN ln -s /home/$user/catkin_ws /root/catkin_ws
 
-# Install pip libraries
-RUN apt-get install -y python-pip
-RUN pip install numpy==1.16 matplotlib scipy==1.2
+# Clear apt cache
+RUN rm -rf /var/lib/apt/lists/*

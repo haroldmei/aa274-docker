@@ -1,24 +1,40 @@
-# Installation
+# OS-Specific Installation Instructions
+
+## Linux
 
 1. Install Docker.
 ```
 ./install_docker.sh
 ```
 2. Restart computer.
-3. Create the Catkin workspace (`catkin_ws`) and Docker network
+
+## Mac
+
+1. Install [Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install/) (not Docker Toolbox).
+[https://download.docker.com/mac/stable/Docker.dmg](https://download.docker.com/mac/stable/Docker.dmg)
+2. Install [XQuartz](https://www.xquartz.org).
+3. Enable the following setting in XQuartz:
+
+XQuartz > Preferences > Security > Allow connections from network clients
+
+4. Install [TurboVNC](https://sourceforge.net/projects/turbovnc/files/).
+
+# ROS Setup
+
+1. Create the Catkin workspace (`catkin_ws`) and Docker network
    (`aa274_net`). Other ROS packages can be put into `catkin_ws` as well.
 ```
 ./init_aa274.sh
 ```
-4. Build the Docker image. This should be run any time `docker/Dockerfile` is changed.
+2. Build the Docker image. This should be run any time `docker/Dockerfile` is changed.
 ```
 ./build_docker.sh
 ```
-5. Build the Catkin workspace. This should be run any time a new ROS package is added.
+3. Build the Catkin workspace. This should be run any time a new ROS package is added to `catkin_ws`.
 ```
 ./rosdep_install.sh
 ```
-6. Whenever you make changes to your own ROS package, compile it with the
+4. Whenever you make changes to your own ROS package, compile it with the
    following command:
 ```
 ./run.sh catkin_make
@@ -33,25 +49,35 @@ Roscore needs to be running before any other nodes. In one terminal window, run:
 
 Nodes can now be run in separate terminal windows.
 ```
-./run.sh <ros_command>
+./run.sh <shell command>
 ```
 
 To choose the ROS master URI, call `run.sh` with `--rosmaster <hostname>` and/or
-`--rosport <port>`:
+`--rosport <port>`. By default, `master:11311` is used.
 ```
-./run.sh --rosmaster master --rosport 11311
+./run.sh --rosmaster master --rosport 11311 <shell command>
 ```
 
-If you are using Docker remotely and need to view the GUI, call the command with
-`--display <display_id>`. Using display ID >= 1 will use the host computer's
-hardware acceleration to render the graphics, while ID == 0 will use software
-rendering.
+*Note*: The Catkin workspace and ROS logs are written to the host filesystem (under
+`catkin_ws` and `.ros`, respectively). Any changes made to these folders in the
+host OS will also be reflected in the Docker containers. However, changes in the
+Docker containers outside these folders are temporary and will not persist
+across sessions.
+
+If you are using Docker on a Mac (or on a remote Linux host via SSH) and need to
+view the GUI, call the command with `--display <display_id>`. This will stream
+the rendered GUI through a TurboVNC server. The display ID must be unique and
+nonzero.
 ```
-./run.sh --display 1 --vncport 5901 roslaunch turtlebot3_gazebo turtlebot3_world.launch
+./run.sh --display 1 roslaunch turtlebot3_gazebo turtlebot3_world.launch
+```
+This command will ask you to create a password for the VNC session. You can then
+connect to this session by opening TurboVNC and connecting to the host's address
+with the display ID or VNC port. The following examples are equivalent:
+```
+localhost:1
+localhost:5901
+127.0.0.1:1
 ```
 The optional `vncport` parameter can be manually specified to avoid port
-collisions with other nodes. Otherwise, the port number will default to
-`5900 + <display_id>`.
-
-You can connect to this VNC instance by connecting to the host's IP address with
-the VNC port number, e.g., `192.168.1.10:5901`.
+collisions. Otherwise, the port number will default to `5900 + <display_id>`.
