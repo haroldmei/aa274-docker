@@ -10,7 +10,7 @@
 
 ## Mac
 
-1. Install [Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install/) (not Docker Toolbox).
+1. Install [Docker Desktop for Mac](https://docs.docker.com/docker-for-mac/install/) (not Docker Toolbox):
 [https://download.docker.com/mac/stable/Docker.dmg](https://download.docker.com/mac/stable/Docker.dmg)
 2. Install [XQuartz](https://www.xquartz.org).
 3. Enable the following setting in XQuartz:
@@ -18,6 +18,12 @@
 XQuartz > Preferences > Security > Allow connections from network clients
 
 4. Install [TurboVNC](https://sourceforge.net/projects/turbovnc/files/).
+5. Run Docker.
+
+## Windows
+
+Partner up with a student with a Mac or Ubuntu laptop, or use the VM provided
+last year: [VM Install Guide](https://docs.google.com/document/d/1ley_pauriyx0PrH8XYfkIrZwXnL3s-xBQvcUY6RE02I/edit?usp=sharing)
 
 # ROS Setup
 
