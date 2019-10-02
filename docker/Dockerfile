@@ -35,7 +35,7 @@ RUN ln -s /home/$user/catkin_ws /root/catkin_ws
 
 # Install pip libraries
 RUN apt-get install -y python-pip
-RUN pip install numpy==1.16 scipy==1.2 matplotlib ipython==5.8 ipykernel==4.10 notebook==5.7 jupyter==1.0 opencv-python scikits.bvp_solver
+RUN pip install numpy==1.16 scipy==1.2 matplotlib tornado==5.1.1 ipython==5.8 ipykernel==4.10 notebook==5.7 jupyter==1.0 opencv-python scikits.bvp_solver
 
 # Clear apt cache
 RUN rm -rf /var/lib/apt/lists/*

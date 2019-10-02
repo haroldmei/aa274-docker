@@ -90,11 +90,16 @@ fi
 cmd+=(--env "ROS_MASTER_URI=http://$rosmaster:$rosport")
 
 # Application specific options
+args="$@"
 if [[ $* == *roscore* ]]; then
 	# Name the roscore container 'master' so that other nodes can reach it
 	cmd+=(--name $rosmaster)
+elif [[ $* == *jupyter* ]]; then
+	cmd+=(--publish 8888:8888)
+	args+=(--ip=0.0.0.0)
 fi
 
 # Run command
 echo ${cmd[@]}
-${cmd[@]} aa274 $@
+echo ${args[@]}
+${cmd[@]} aa274 ${args[@]}
