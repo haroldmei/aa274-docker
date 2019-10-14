@@ -30,12 +30,15 @@ RUN echo "\n$user ALL=(ALL) NOPASSWD:ALL\n" >> /etc/sudoers
 COPY ros_env.sh /
 COPY ros_entrypoint.sh /
 RUN sed -i "s/\${HOST_USER}/$user/g" /ros_entrypoint.sh
-RUN echo "\nsource /ros_env.sh\n" >> /home/$user/.bashrc
+RUN echo "\nsource /ros_env.sh\nsource /home/$user/catkin_ws/.bashrc" >> /home/$user/.bashrc
 RUN ln -s /home/$user/catkin_ws /root/catkin_ws
 
 # Install pip libraries
 RUN apt-get install -y python-pip
 RUN pip install numpy==1.16 scipy==1.2 matplotlib tornado==5.1.1 ipython==5.8 ipykernel==4.10 notebook==5.7 jupyter==1.0 opencv-python scikits.bvp_solver
+
+# Install additional apt packages
+RUN apt-get install -y net-tools
 
 # Clear apt cache
 RUN rm -rf /var/lib/apt/lists/*

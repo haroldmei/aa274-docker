@@ -14,4 +14,4 @@ fi
 if [[ -z $ROS_MASTER_URI ]]; then
 	export ROS_MASTER_URI=http://master:11311
 fi
-export TURTLEBOT3_MODEL=waffle
+export TURTLEBOT3_MODEL=burger
