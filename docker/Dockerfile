@@ -1,16 +1,21 @@
 FROM osrf/ros:kinetic-desktop-full
 
+# Set up Gazebo source
+RUN apt-get update && apt-get install -y wget
+RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
+
 # Install dependent packages for TurtleBot3 control
-RUN apt-get update && apt-get install -y ros-kinetic-joy ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard ros-kinetic-laser-proc ros-kinetic-rgbd-launch ros-kinetic-depthimage-to-laserscan ros-kinetic-rosserial-arduino ros-kinetic-rosserial-python ros-kinetic-rosserial-server ros-kinetic-rosserial-client ros-kinetic-rosserial-msgs ros-kinetic-amcl ros-kinetic-map-server ros-kinetic-move-base ros-kinetic-urdf ros-kinetic-xacro ros-kinetic-compressed-image-transport ros-kinetic-rqt-image-view ros-kinetic-gmapping ros-kinetic-navigation ros-kinetic-interactive-markers
+RUN apt-get update && apt-get install -y ros-kinetic-joy ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard ros-kinetic-laser-proc ros-kinetic-rgbd-launch ros-kinetic-depthimage-to-laserscan ros-kinetic-rosserial-arduino ros-kinetic-rosserial-python ros-kinetic-rosserial-server ros-kinetic-rosserial-client ros-kinetic-rosserial-msgs ros-kinetic-amcl ros-kinetic-map-server ros-kinetic-move-base ros-kinetic-urdf ros-kinetic-xacro ros-kinetic-compressed-image-transport ros-kinetic-rqt-image-view ros-kinetic-gmapping ros-kinetic-navigation ros-kinetic-interactive-markers gazebo7
 
 # Install TurboVNC
-RUN apt-get install -y wget expect x11-xkb-utils xauth xfonts-base xkb-data
+RUN apt-get install -y expect x11-xkb-utils xauth xfonts-base xkb-data
 RUN tmp="$(mktemp)" && \
-	wget -O "$tmp" https://svwh.dl.sourceforge.net/project/virtualgl/2.6.2/virtualgl_2.6.2_amd64.deb && \
+	wget -O "$tmp" https://downloads.sourceforge.net/project/virtualgl/2.6.2/virtualgl_2.6.2_amd64.deb && \
 	dpkg -i "$tmp" && \
 	rm -f $tmp
 RUN tmp="$(mktemp)" && \
-	wget -O "$tmp" https://svwh.dl.sourceforge.net/project/turbovnc/2.2.2/turbovnc_2.2.2_amd64.deb && \
+	wget -O "$tmp" https://downloads.sourceforge.net/project/turbovnc/2.2.2/turbovnc_2.2.2_amd64.deb && \
 	dpkg -i "$tmp" && \
 	rm -f $tmp
 ENV PATH ${PATH}:/opt/VirtualGL/bin:/opt/TurboVNC/bin
@@ -35,10 +40,10 @@ RUN ln -s /home/$user/catkin_ws /root/catkin_ws
 
 # Install pip libraries
 RUN apt-get install -y python-pip
-RUN pip install numpy==1.16 scipy==1.2 matplotlib tornado==5.1.1 ipython==5.8 ipykernel==4.10 notebook==5.7 jupyter==1.0 opencv-python scikits.bvp_solver
+RUN pip install numpy==1.16 scipy==1.2 matplotlib tornado==5.1.1 ipython==5.8 ipykernel==4.10 notebook==5.7 jupyter==1.0 opencv-python scikits.bvp_solver tensorflow
 
 # Install additional apt packages
 RUN apt-get install -y net-tools
 
 # Clear apt cache
-RUN rm -rf /var/lib/apt/lists/*
+RUN apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
