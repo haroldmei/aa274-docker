@@ -4,7 +4,6 @@ directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 network=aa274_net
 
 # Base Docker command
-# -p 32768-32778
 cmd=( \
 	docker run -it --rm --init --privileged \
 	--mount type=bind,src=$directory/catkin_ws,dst=/home/$USER/catkin_ws \
@@ -89,15 +88,20 @@ if [[ -z $rosmaster ]]; then
 fi
 
 # Configure ROS ports
-cmd+=(--env "ROS_MASTER_URI=http://$rosmaster:$rosport")
 if [[ "$rosmaster" != "master" ]]; then
-	cmd+=(--env "ROS_HOSTNAME=$HOSTNAME")
+	if [[ $(uname) == "Linux" ]]; then
+		rosmaster=$(ping -c 1 $rosmaster | head -2 | tail -1 | cut -d ' ' -f 4 | cut -d ':' -f 1)
+		cmd+=(--env "ROS_IP=$(ifconfig wlp2s0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')")
+	else
+		cmd+=(--env "ROS_HOSTNAME=$HOSTNAME")
+	fi
 	num_containers=$(docker container ls | grep aa274 | wc -l)
 	port_mapping_start=$((32768 + num_containers * 32))
 	port_mapping_range="$port_mapping_start-$((port_mapping_start+31))"
 	cmd+=(--publish "$port_mapping_range:$port_mapping_range")
 	cmd+=(--env "PORT_MAPPING_START=$port_mapping_start")
 fi
+cmd+=(--env "ROS_MASTER_URI=http://$rosmaster:$rosport")
 
 # Application specific options
 args="$@"
