@@ -41,7 +41,7 @@ RUN ln -s /home/$user/catkin_ws /root/catkin_ws
 # Install pip libraries
 RUN apt-get install -y python-pip
 RUN python -m pip install --upgrade pip
-RUN python -m pip install numpy==1.16 scipy matplotlib==2.2 jupyter scikits.bvp_solver
+RUN python -m pip install numpy==1.16 scipy matplotlib==2.2 jupyter scikits.bvp_solver dubins==0.9.2
 # RUN dpkg --remove --force-depends python-enum34  # Installed by ros, newer version required by tensorflow
 # RUN python -m pip install tensorflow==1.15
 
