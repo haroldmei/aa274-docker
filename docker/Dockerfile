@@ -40,10 +40,14 @@ RUN ln -s /home/$user/catkin_ws /root/catkin_ws
 
 # Install pip libraries
 RUN apt-get install -y python-pip
-RUN pip install numpy==1.16 scipy==1.2 matplotlib tornado==5.1.1 ipython==5.8 ipykernel==4.10 notebook==5.7 jupyter==1.0 opencv-python scikits.bvp_solver tensorflow
+RUN python -m pip install --upgrade pip
+RUN dpkg --remove --force-depends python-enum34
+RUN python -m pip install numpy==1.16 scipy matplotlib==2.2 jupyter scikits.bvp_solver tensorflow==1.15
 
 # Install additional apt packages
-RUN apt-get install -y net-tools
+RUN apt-get -f install -y
+RUN apt-get install -y net-tools iputils-ping vim nano less tmux
 
 # Clear apt cache
-RUN apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+RUN apt-get autoremove -y
+RUN rm -rf /var/lib/apt/lists/*

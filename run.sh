@@ -4,8 +4,9 @@ directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 network=aa274_net
 
 # Base Docker command
+# -p 32768-32778
 cmd=( \
-	docker run -it --rm --init \
+	docker run -it --rm --init --privileged \
 	--mount type=bind,src=$directory/catkin_ws,dst=/home/$USER/catkin_ws \
 	--mount type=bind,src=$directory/.ros,dst=/home/$USER/.ros \
 	--net $network \
@@ -87,7 +88,16 @@ if [[ -z $rosmaster ]]; then
 	rosmaster="master"
 fi
 
+# Configure ROS ports
 cmd+=(--env "ROS_MASTER_URI=http://$rosmaster:$rosport")
+if [[ "$rosmaster" != "master" ]]; then
+	cmd+=(--env "ROS_HOSTNAME=$HOSTNAME")
+	num_containers=$(docker container ls | grep aa274 | wc -l)
+	port_mapping_start=$((32768 + num_containers * 32))
+	port_mapping_range="$port_mapping_start-$((port_mapping_start+31))"
+	cmd+=(--publish "$port_mapping_range:$port_mapping_range")
+	cmd+=(--env "PORT_MAPPING_START=$port_mapping_start")
+fi
 
 # Application specific options
 args="$@"
