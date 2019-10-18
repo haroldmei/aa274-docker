@@ -59,7 +59,7 @@ if [[ -n $display ]]; then
 		cmd+=(-p $vncport:$vncport)
 
 		# Prompt VNC password
-		printf "\nRunning a VNC instance at $(hostname --ip-address):${vncport} with the password created below.\n\n"
+		printf "\nRunning a VNC instance at localhost:${vncport} with the password created below.\n\n"
 		while [[ ${#password} -lt 6 ]]; do
 			read -p "VNC password (6-8 characters): " -s password
 		done
