@@ -91,15 +91,15 @@ fi
 if [[ "$rosmaster" != "master" ]]; then
 	if [[ $(uname) == "Linux" ]]; then
 		rosmaster=$(ping -c 1 $rosmaster | head -2 | tail -1 | cut -d ' ' -f 4 | cut -d ':' -f 1)
-		cmd+=(--env "ROS_IP=$(ifconfig wlp2s0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}')")
+		cmd+=(--env "ROS_IP=$(hostname -I | grep -oP '192.168.1.\d+')")
 	else
 		cmd+=(--env "ROS_HOSTNAME=$HOSTNAME")
 	fi
 	num_containers=$(docker container ls | grep aa274 | wc -l)
 	port_mapping_start=$((32768 + num_containers * 32))
 	port_mapping_range="$port_mapping_start-$((port_mapping_start+31))"
-	cmd+=(--publish "$port_mapping_range:$port_mapping_range")
-	cmd+=(--env "PORT_MAPPING_START=$port_mapping_start")
+	cmd_ports=(--publish "$port_mapping_range:$port_mapping_range")
+	cmd_ports+=(--env "PORT_MAPPING_START=$port_mapping_start")
 fi
 cmd+=(--env "ROS_MASTER_URI=http://$rosmaster:$rosport")
 
@@ -114,6 +114,14 @@ elif [[ $* == *jupyter* ]]; then
 fi
 
 # Run command
-echo ${cmd[@]}
+echo ${cmd[@]} ${cmd_ports[@]}
 echo ${args[@]}
-${cmd[@]} aa274 ${args[@]}
+${cmd[@]} ${cmd_ports[@]} aa274 ${args[@]}
+while [ $? -eq 125 ]; do
+	port_mapping_start=$((port_mapping_start + 32))
+	port_mapping_range="$port_mapping_start-$((port_mapping_start+31))"
+	cmd_ports=(--publish "$port_mapping_range:$port_mapping_range")
+	cmd_ports+=(--env "PORT_MAPPING_START=$port_mapping_start")
+	echo ${cmd[@]} ${cmd_ports[@]}
+	${cmd[@]} ${cmd_ports[@]} aa274 ${args[@]}
+done
