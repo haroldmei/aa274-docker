@@ -2,7 +2,7 @@
 
 # Limit local port range available to ROS
 if [[ ! -z $PORT_MAPPING_START ]]; then
-	sudo sysctl -w net.ipv4.ip_local_port_range="$PORT_MAPPING_START $((PORT_MAPPING_START + 31))"
+	sudo sysctl -w net.ipv4.ip_local_port_range="$PORT_MAPPING_START $PORT_MAPPING_END"
 fi
 
 # Set ROS build mode

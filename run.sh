@@ -2,6 +2,7 @@
 
 directory="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 network=aa274_net
+num_ports=64
 
 # Base Docker command
 cmd=( \
@@ -96,10 +97,12 @@ if [[ "$rosmaster" != "master" ]]; then
 		cmd+=(--env "ROS_HOSTNAME=$HOSTNAME")
 	fi
 	num_containers=$(docker container ls | grep aa274 | wc -l)
-	port_mapping_start=$((32768 + num_containers * 32))
-	port_mapping_range="$port_mapping_start-$((port_mapping_start+31))"
+	port_mapping_start=$((32768 + num_containers * num_ports))
+	port_mapping_end=$((port_mapping_start + num_ports - 1))
+	port_mapping_range="$port_mapping_start-$port_mapping_end"
 	cmd_ports=(--publish "$port_mapping_range:$port_mapping_range")
 	cmd_ports+=(--env "PORT_MAPPING_START=$port_mapping_start")
+	cmd_ports+=(--env "PORT_MAPPING_END=$port_mapping_end")
 fi
 cmd+=(--env "ROS_MASTER_URI=http://$rosmaster:$rosport")
 
@@ -118,10 +121,12 @@ echo ${cmd[@]} ${cmd_ports[@]}
 echo ${args[@]}
 ${cmd[@]} ${cmd_ports[@]} aa274 ${args[@]}
 while [ $? -eq 125 ]; do
-	port_mapping_start=$((port_mapping_start + 32))
-	port_mapping_range="$port_mapping_start-$((port_mapping_start+31))"
+	port_mapping_start=$((port_mapping_start + num_ports))
+	port_mapping_end=$((port_mapping_start + num_ports - 1))
+	port_mapping_range="$port_mapping_start-$port_mapping_end"
 	cmd_ports=(--publish "$port_mapping_range:$port_mapping_range")
 	cmd_ports+=(--env "PORT_MAPPING_START=$port_mapping_start")
+	cmd_ports+=(--env "PORT_MAPPING_END=$port_mapping_end")
 	echo ${cmd[@]} ${cmd_ports[@]}
 	${cmd[@]} ${cmd_ports[@]} aa274 ${args[@]}
 done
