@@ -93,6 +93,13 @@ if [[ "$rosmaster" != "master" ]]; then
 	if [[ $(uname) == "Linux" ]]; then
 		rosmaster=$(ping -c 1 $rosmaster | head -2 | tail -1 | cut -d ' ' -f 4 | cut -d ':' -f 1)
 		cmd+=(--env "ROS_IP=$(hostname -I | grep -oP '192.168.1.\d+')")
+	elif [[ $(uname) == "Darwin" ]]; then
+		ping -c1 $HOSTNAME
+		if [[ "$?" == 0 ]]; then
+			cmd+=(--env "ROS_HOSTNAME=$HOSTNAME")
+		else
+			cmd+=(--env "ROS_IP=$(ifconfig | awk '/inet / {print $2}' | grep 192.168.1 | head)")
+		fi
 	else
 		cmd+=(--env "ROS_HOSTNAME=$HOSTNAME")
 	fi
