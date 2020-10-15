@@ -14,4 +14,4 @@ git clone https://github.com/StanfordASL/asl_turtlebot.git
 docker network create --driver bridge aa274_net
 
 # Download latest ros image
-docker pull osrf/ros:kinetic-desktop-full
+docker pull osrf/ros:noetic-desktop-full

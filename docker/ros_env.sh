@@ -11,7 +11,7 @@ if [[ -z $build ]]; then
 fi
 
 # Setup ros environment
-source /opt/ros/kinetic/setup.bash
+source /opt/ros/noetic/setup.bash
 if [[ -f ~/catkin_ws/$build/setup.bash ]]; then
 	source ~/catkin_ws/$build/setup.bash
 fi
