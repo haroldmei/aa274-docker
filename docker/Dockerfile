@@ -1,7 +1,7 @@
-FROM osrf/ros:kinetic-desktop-full
+FROM ubuntu:xenial
 
 # Set up Gazebo source
-RUN apt-get update && apt-get install -y wget
+RUN apt-get update && apt-get install -y wget ros-kinetic-desktop-full
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
 RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
 
