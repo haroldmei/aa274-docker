@@ -47,7 +47,7 @@ RUN python -m pip install numpy==1.16 scipy matplotlib==2.2 jupyter scikits.bvp_
 
 # Install additional apt packages
 RUN apt-get -f install -y
-RUN apt-get install -y net-tools iputils-ping vim nano less tmux
+RUN apt-get install -y net-tools iputils-ping vim nano less tmux libpcap-dev
 
 # Clear apt cache
 RUN apt-get autoremove -y
