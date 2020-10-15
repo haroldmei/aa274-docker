@@ -3,6 +3,7 @@ FROM ubuntu:xenial
 # Set up Gazebo source
 RUN apt-get update && apt-get install -y wget ros-kinetic-desktop-full
 RUN sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
 RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
 
 # Install dependent packages for TurtleBot3 control
