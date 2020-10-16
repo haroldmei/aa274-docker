@@ -8,7 +8,7 @@ RUN wget http://packages.osrfoundation.org/gazebo.key -O - | apt-key add -
 # Install dependent packages for TurtleBot3 control
 RUN apt-get update && apt-get install -y ros-kinetic-joy ros-kinetic-teleop-twist-joy ros-kinetic-teleop-twist-keyboard ros-kinetic-laser-proc ros-kinetic-rgbd-launch ros-kinetic-depthimage-to-laserscan ros-kinetic-rosserial-arduino ros-kinetic-rosserial-python ros-kinetic-rosserial-server ros-kinetic-rosserial-client ros-kinetic-rosserial-msgs ros-kinetic-amcl ros-kinetic-map-server ros-kinetic-move-base ros-kinetic-urdf ros-kinetic-xacro ros-kinetic-compressed-image-transport ros-kinetic-rqt-image-view ros-kinetic-gmapping ros-kinetic-navigation ros-kinetic-interactive-markers gazebo7
 
-# Install TurboVNC
+# Install TurboVNCpython-tk
 RUN apt-get install -y expect x11-xkb-utils xauth xfonts-base xkb-data
 RUN tmp="$(mktemp)" && \
 	wget -O "$tmp" https://downloads.sourceforge.net/project/virtualgl/2.6.2/virtualgl_2.6.2_amd64.deb && \
@@ -41,13 +41,13 @@ RUN ln -s /home/$user/catkin_ws /root/catkin_ws
 # Install pip libraries
 RUN apt-get install -y python-pip
 RUN python -m pip install --upgrade pip
-RUN python -m pip install numpy==1.16 scipy matplotlib==2.2 jupyter scikits.bvp_solver dubins==0.9.2
-# RUN dpkg --remove --force-depends python-enum34  # Installed by ros, newer version required by tensorflow
-# RUN python -m pip install tensorflow==1.15
+RUN python -m pip install numpy==1.16 scipy matplotlib==2.2 jupyter scikits.bvp_solver dubins==0.9.2 opencv-python==4.2.0.32
+RUN dpkg --remove --force-depends python-enum34  # Installed by ros, newer version required by tensorflow
+RUN python -m pip install tensorflow==1.15
 
 # Install additional apt packages
 RUN apt-get -f install -y
-RUN apt-get install -y net-tools iputils-ping vim nano less tmux libpcap-dev
+RUN apt-get install -y net-tools iputils-ping vim nano less tmux libpcap-dev python-tk
 
 # Clear apt cache
 RUN apt-get autoremove -y
