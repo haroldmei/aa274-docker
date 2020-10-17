@@ -8,7 +8,7 @@ cd catkin_ws/src
 git clone https://github.com/ROBOTIS-GIT/turtlebot3_msgs.git
 git clone https://github.com/ROBOTIS-GIT/turtlebot3.git
 git clone https://github.com/ROBOTIS-GIT/turtlebot3_simulations.git
-git clone https://github.com/StanfordASL/asl_turtlebot.git
+git clone https://github.com/haroldmei/asl_turtlebot.git
 
 # Create docker network
 docker network create --driver bridge aa274_net
